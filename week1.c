@@ -88,6 +88,5 @@ __interrupt void Timer0_A0(void) // Timer0 A0 1ms interrupt service routine
     {
         heartbeat = 1;
         LEDRedToggle();
-
     }
 }

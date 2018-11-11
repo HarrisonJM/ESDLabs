@@ -60,13 +60,14 @@ void initScreen()
     // Set P1.0 off (Green LED)
 }
 
-int main(void)
+int mainold2(void)
 {
     initOther();
     initScreen();
 
     for(;;)
     {
+        // Char passed in here displays on the screen
         buildScene('1');
         outputDisplayBuffer();
     }

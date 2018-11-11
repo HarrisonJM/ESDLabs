@@ -111,7 +111,7 @@ void buildScene(char numberToDisplay)
     int j; // iterates
 
     initDisplayBuffer(0xFF);
-
+    // Displays the first 10 chracters fo the font
     for (i=0; i<8; i++)
     {
         for(j=0; j<10; j++)
@@ -119,7 +119,7 @@ void buildScene(char numberToDisplay)
             DisplayBuffer[i+72][j] = ~Font[i][j];
         }
     }
-
+    // Displays the last 6 characters of the font
     for (i=0; i<8; i++)
     {
         for(j=0; j<6; j++)
@@ -141,13 +141,15 @@ void buildScene(char numberToDisplay)
     // i iterates through array
     for (i=0; i<8; i++)
     {
+        // To stopt he tank being weird we divide by 8 because the screen is broken up
+        //into 8x8 pixel chunks across the 96x96 display.
         DisplayBuffer[i/8+k+10][3] = ~Tank[i][2];
         //k is speed/distance ratio thingy
         k = (k+1) % 160;
     }
 
     int charToPrint = 0;
-
+    // Uses a switch to select the char to print
     switch(numberToDisplay)
     {
     case '0':
@@ -158,10 +160,12 @@ void buildScene(char numberToDisplay)
         break;
     }
 
+    // indexes based on that
     for (i=0; i<8; i++)
     {
         for(j=0; j<charToPrint+1; j++)
         {
+            // Adding 64 selects the 8th line (and the 0th column)
             DisplayBuffer[i+64][0] = ~Font[i][charToPrint];
         }
     }
