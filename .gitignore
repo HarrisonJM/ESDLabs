@@ -50,3 +50,23 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+#Stupid mac files
+*.DS_Store
+.DS_Store
+
+#Stupid Windows Files
+*.tmp
+*~*
+
+#ECLIPSE
+Debug/
+Release/
+.settings/
+targetConfigs/
+
+lnk_msp430fr5969.cmd
+.ccsproject
+.cproject
+.project
+.launches/

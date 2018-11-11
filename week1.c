@@ -42,7 +42,7 @@ int heartbeat = 1;
 /**
  * main.c
  */
-int main(void)
+int mainOld(void)
 {
 	WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
 	
@@ -56,6 +56,7 @@ int main(void)
 	P1DIR &= ~0x02; // P1.1 input (switch 2)
 	P1REN |= 0x02; // P1.1 pull up resistor
 
+	// Timer init
 	TA0CCR0 = 1024;
 	TA0CCTL0 = 0x10;
 	TA0CTL = TASSEL_2 + MC_1;
