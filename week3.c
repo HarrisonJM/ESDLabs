@@ -17,12 +17,10 @@ void enter_button_state(int new_state);
 #define LED_ON 1
 #define LED_PERIOD 50
 
-
 int led_state = LED_OFF;
 int led_period = 0;
 
 int counter_button_handler = 0;
-int number_of_button_presses = 0;
 int button_state = BUTTON_RELEASED;
 
 int counter_10ms = 0;
@@ -42,72 +40,72 @@ void init_button_handler()
 
 void button_handler()
 {
-    switch (button_state)
+    switch(button_state)
     {
-        case BUTTON_RELEASED:
-            P1OUT &= (0xFF-0x01); // Set P1.0 off using AND
-            if ((P1IN & 0x02) == 0)
+    case BUTTON_RELEASED:
+        P1OUT &= (0xFF - 0x01); // Set P1.0 off using AND
+        if((P1IN & 0x02) == 0)
+        {
+            if(releaseTime >= (MINIMUM_BUTTON_INTERACTION_TIME / INTERVAL_BUTTON_HANDLER))
             {
-                if (releaseTime >= (MINIMUM_BUTTON_INTERACTION_TIME/INTERVAL_BUTTON_HANDLER))
-                {
-                    releaseTime = 0;
-                    button_state = BUTTON_PRESSED;
-                }
+                releaseTime = 0;
+                button_state = BUTTON_PRESSED;
             }
-            break;
-        case BUTTON_PRESSED:
-            press_time++;
-            P1OUT |= 0x01; // Set P1.0 on using OR
-            if ((P1IN & 0x02) != 0)
-            {
-                if (press_time >= (MINIMUM_BUTTON_INTERACTION_TIME/INTERVAL_BUTTON_HANDLER))
-                {
-                    press_time = 0;
-                    number_of_button_presses++;
-                }
-                button_state = BUTTON_RELEASED;
-            }
-            else
-            {
-                if (press_time >= (BUTTON_HELD_TIME/INTERVAL_BUTTON_HANDLER))
-                {
-                    press_time = 0;
-                    number_of_button_presses++;
-                    button_state = BUTTON_HELD;
-                }
-            }
-            break;
-        case BUTTON_HELD:
-            press_time++;
-            if ((P1IN & 0x02) != 0)
+        }
+        break;
+    case BUTTON_PRESSED:
+        press_time++;
+        P1OUT |= 0x01; // Set P1.0 on using OR
+        if((P1IN & 0x02) != 0)
+        {
+            if(press_time >= (MINIMUM_BUTTON_INTERACTION_TIME / INTERVAL_BUTTON_HANDLER))
             {
                 press_time = 0;
-                button_state = BUTTON_RELEASED;
+                number_of_button_presses++;
             }
-            else
+            button_state = BUTTON_RELEASED;
+        }
+        else
+        {
+            if(press_time >= (BUTTON_HELD_TIME / INTERVAL_BUTTON_HANDLER))
             {
-                if (press_time >= (BUTTON_HELD_TIME/INTERVAL_BUTTON_HANDLER))
-                {
-                    press_time = 0;
-                    number_of_button_presses++;
-                }
+                press_time = 0;
+                number_of_button_presses++;
+                button_state = BUTTON_HELD;
             }
-            break;
-        default:
-            break;
+        }
+        break;
+    case BUTTON_HELD:
+        press_time++;
+        if((P1IN & 0x02) != 0)
+        {
+            press_time = 0;
+            button_state = BUTTON_RELEASED;
+        }
+        else
+        {
+            if(press_time >= (BUTTON_HELD_TIME / INTERVAL_BUTTON_HANDLER))
+            {
+                press_time = 0;
+                number_of_button_presses++;
+            }
+        }
+        break;
+    default:
+        break;
     }
 }
 
 void led_handler()
 {
     led_period++;
-    if (led_period >= LED_PERIOD)
+    if(led_period >= LED_PERIOD)
     {
         led_period = 0;
-        switch (led_state)
+        switch(led_state)
         {
         case LED_OFF:
-            if (number_of_button_presses > 0)
+            if(number_of_button_presses > 0)
             {
                 number_of_button_presses--;
                 P1OUT |= 0x01; // Set P1.0 on using OR
@@ -119,7 +117,7 @@ void led_handler()
             }
             break;
         case LED_ON:
-            P1OUT &= (0xFF-0x01); // Set P1.0 off using AND
+            P1OUT &= (0xFF - 0x01); // Set P1.0 off using AND
             led_state = LED_OFF;
             break;
         default:
@@ -171,15 +169,15 @@ __interrupt void Timer0_A0(void) // Timer0 A0 1ms interrupt service routine
     }
 
     counter_10ms++;
-    if (counter_10ms >= 10)
+    if(counter_10ms >= 10)
     {
         counter_10ms = 0;
         button_handler();
         led_handler();
     }
 
-    counter_button_handler ++;
-    if (counter_button_handler >= INTERVAL_BUTTON_HANDLER)
+    counter_button_handler++;
+    if(counter_button_handler >= INTERVAL_BUTTON_HANDLER)
     {
         counter_button_handler = 0;
         button_handler();
