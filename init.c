@@ -1,8 +1,6 @@
 #include <msp430.h>
 
-#include "lcd1.h"
-
-void initOther()
+void initLEDAndButton()
 {
     WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
 
@@ -16,12 +14,14 @@ void initOther()
     P1DIR &= ~0x02; // P1.1 input (switch 2)
     P1REN |= 0x02; // P1.1 pull up resistor
 
+    // Timer init
     TA0CCR0 = 1024;
     TA0CCTL0 = 0x10;
     TA0CTL = TASSEL_2 + MC_1;
 
     _BIS_SR(GIE);
 }
+
 void initScreen()
 {
     // LCD
@@ -58,17 +58,4 @@ void initScreen()
     // Enable LCD
     P1OUT &= ~0x01;
     // Set P1.0 off (Green LED)
-}
-
-int mainold2(void)
-{
-    initOther();
-    initScreen();
-
-    for(;;)
-    {
-        // Char passed in here displays on the screen
-        buildScene('1');
-        outputDisplayBuffer();
-    }
 }

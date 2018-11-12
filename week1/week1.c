@@ -1,4 +1,5 @@
 #include <msp430.h> 
+#include "../init.h"
 
 void __LEDRedToggle()
 {
@@ -42,26 +43,9 @@ int heartbeat = 1;
 /**
  * main.c
  */
-int mainOld(void)
+int week1main(void)
 {
-	WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
-	
-	// init
-
-	PM5CTL0 &= ~LOCKLPM5; // Do to drive ports
-
-	P1DIR |= 0x01; // P1.0 = out, port 1 bit 0
-	P4DIR |= 0x40; // port 4 bit 6 P4 (0010-0000 except flipped)
-
-	P1DIR &= ~0x02; // P1.1 input (switch 2)
-	P1REN |= 0x02; // P1.1 pull up resistor
-
-	// Timer init
-	TA0CCR0 = 1024;
-	TA0CCTL0 = 0x10;
-	TA0CTL = TASSEL_2 + MC_1;
-
-	_BIS_SR(GIE);
+    initLEDAndButton();
 
     //bg loop
 	for(;;)
