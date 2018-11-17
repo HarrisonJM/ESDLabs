@@ -60,17 +60,17 @@ int week1main(void)
 	    }
 	}
 
-	return 0;
+//	return 0;
 }
 
-#pragma vector=TIMER0_A0_VECTOR
-__interrupt void Timer0_A0(void) // Timer0 A0 1ms interrupt service routine
-{
-    heartbeat++;
-    // toggle on and off every 500ms
-    if(heartbeat >= 500)
-    {
-        heartbeat = 1;
-        LEDRedToggle();
-    }
-}
+//#pragma vector=TIMER0_A0_VECTOR
+//__interrupt void Timer0_A0(void) // Timer0 A0 1ms interrupt service routine
+//{
+//    heartbeat++;
+//    // toggle on and off every 500ms
+//    if(heartbeat >= 500)
+//    {
+//        heartbeat = 1;
+//        LEDRedToggle();
+//    }
+//}
